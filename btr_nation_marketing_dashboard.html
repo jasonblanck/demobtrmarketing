@@ -1,0 +1,783 @@
+
+<h2 class="sr-only">BTR Nation Sales and Marketing Performance Dashboard with KPI metrics and charts for Shopify, Klaviyo, Attentive, Instagram, and TikTok</h2>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .dash {
+    font-family: 'DM Sans', sans-serif;
+    background: #0d0e0f;
+    color: #f0ede8;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .top-bar {
+    background: #111213;
+    border-bottom: 1px solid #222;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-badge {
+    background: #c8f565;
+    color: #0d0e0f;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+
+  .logo-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: #f0ede8;
+    letter-spacing: 0.02em;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: #666;
+    margin-top: 1px;
+  }
+
+  .top-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .date-range {
+    display: flex;
+    gap: 4px;
+  }
+
+  .dr-btn {
+    background: #1a1b1c;
+    border: 1px solid #2a2b2c;
+    color: #888;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .dr-btn.active, .dr-btn:hover {
+    background: #c8f565;
+    border-color: #c8f565;
+    color: #0d0e0f;
+    font-weight: 500;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #c8f565;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .live-label {
+    font-size: 11px;
+    color: #666;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .content {
+    padding: 24px 28px;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    margin-top: 28px;
+  }
+
+  .section-label:first-child { margin-top: 0; }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .kpi {
+    background: #111213;
+    border: 1px solid #1e1f20;
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent, #c8f565);
+  }
+
+  .kpi-source {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #555;
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 10px;
+  }
+
+  .kpi-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: #f0ede8;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .kpi-label {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+
+  .kpi-delta {
+    font-size: 11px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .kpi-delta.up { color: #c8f565; }
+  .kpi-delta.down { color: #e2574c; }
+
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .chart-card {
+    background: #111213;
+    border: 1px solid #1e1f20;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+
+  .chart-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #d0cdc8;
+  }
+
+  .chart-subtitle {
+    font-size: 10px;
+    color: #555;
+    margin-top: 2px;
+  }
+
+  .chart-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: #1e2a14;
+    color: #c8f565;
+    border: 1px solid #2a3d1a;
+  }
+
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  .legend-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #888;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .source-tab-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+
+  .src-chip {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 12px;
+    border: 1px solid #2a2b2c;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .src-chip.active-shopify { background: #1e2a14; border-color: #c8f565; color: #c8f565; }
+  .src-chip.active-klaviyo { background: #1a1e2a; border-color: #4a7cff; color: #4a7cff; }
+  .src-chip.active-attentive { background: #2a1a1e; border-color: #ff6b9d; color: #ff6b9d; }
+  .src-chip.active-ig { background: #1f1a2a; border-color: #c86af5; color: #c86af5; }
+  .src-chip.active-tt { background: #2a1e1a; border-color: #ff5e5e; color: #ff5e5e; }
+
+  .table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .table-wrap th {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #555;
+    font-family: 'Space Mono', monospace;
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid #1e1f20;
+  }
+
+  .table-wrap td {
+    padding: 8px 8px;
+    color: #c0bdb8;
+    border-bottom: 1px solid #181919;
+  }
+
+  .table-wrap tr:last-child td { border-bottom: none; }
+
+  .pill {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .pill-green { background: #1e2a14; color: #c8f565; }
+  .pill-red { background: #2a1515; color: #e2574c; }
+
+  .bar-mini {
+    height: 4px;
+    border-radius: 2px;
+    background: #c8f565;
+    margin-top: 4px;
+  }
+
+  .chan-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid #181919;
+  }
+  .chan-row:last-child { border-bottom: none; }
+  .chan-name { font-size: 12px; color: #c0bdb8; }
+  .chan-val { font-family: 'Space Mono', monospace; font-size: 12px; color: #f0ede8; }
+</style>
+
+<div class="dash">
+  <div class="top-bar">
+    <div class="logo-area">
+      <div>
+        <div class="logo-badge">B.T.R.</div>
+      </div>
+      <div>
+        <div class="logo-text">Marketing Performance Hub</div>
+        <div class="logo-sub">Sales · Email · SMS · Social</div>
+      </div>
+    </div>
+    <div class="top-right">
+      <div class="date-range" id="dateRange">
+        <button class="dr-btn" onclick="setRange(this,'7d')">7D</button>
+        <button class="dr-btn active" onclick="setRange(this,'30d')">30D</button>
+        <button class="dr-btn" onclick="setRange(this,'90d')">90D</button>
+      </div>
+      <div class="live-label"><div class="live-dot"></div>LIVE DEMO</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Shopify · Core Commerce</div>
+    <div class="kpi-row" id="kpiRow1">
+      <div class="kpi" style="--accent:#c8f565">
+        <div class="kpi-source">SHOPIFY</div>
+        <div class="kpi-val" id="rev">$284K</div>
+        <div class="kpi-label">Total Revenue</div>
+        <span class="kpi-delta up" id="revD">↑ 18.4%</span>
+      </div>
+      <div class="kpi" style="--accent:#c8f565">
+        <div class="kpi-source">SHOPIFY</div>
+        <div class="kpi-val" id="orders">4,812</div>
+        <div class="kpi-label">Orders</div>
+        <span class="kpi-delta up" id="ordersD">↑ 12.1%</span>
+      </div>
+      <div class="kpi" style="--accent:#c8f565">
+        <div class="kpi-source">SHOPIFY</div>
+        <div class="kpi-val" id="aov">$59</div>
+        <div class="kpi-label">Avg Order Value</div>
+        <span class="kpi-delta up" id="aovD">↑ 5.6%</span>
+      </div>
+      <div class="kpi" style="--accent:#c8f565">
+        <div class="kpi-source">SHOPIFY</div>
+        <div class="kpi-val" id="cvr">3.8%</div>
+        <div class="kpi-label">Conv. Rate</div>
+        <span class="kpi-delta up" id="cvrD">↑ 0.4pp</span>
+      </div>
+      <div class="kpi" style="--accent:#c8f565">
+        <div class="kpi-source">SHOPIFY</div>
+        <div class="kpi-val" id="roas">4.2x</div>
+        <div class="kpi-label">Blended ROAS</div>
+        <span class="kpi-delta down" id="roasD">↓ 0.3x</span>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Email · SMS · Social</div>
+    <div class="kpi-row">
+      <div class="kpi" style="--accent:#4a7cff">
+        <div class="kpi-source">KLAVIYO</div>
+        <div class="kpi-val" id="korev">$64K</div>
+        <div class="kpi-label">Email Revenue</div>
+        <span class="kpi-delta up">↑ 22.3%</span>
+      </div>
+      <div class="kpi" style="--accent:#4a7cff">
+        <div class="kpi-source">KLAVIYO</div>
+        <div class="kpi-val" id="kor">41.2%</div>
+        <div class="kpi-label">Open Rate</div>
+        <span class="kpi-delta up">↑ 3.1pp</span>
+      </div>
+      <div class="kpi" style="--accent:#ff6b9d">
+        <div class="kpi-source">ATTENTIVE</div>
+        <div class="kpi-val" id="smsrev">$31K</div>
+        <div class="kpi-label">SMS Revenue</div>
+        <span class="kpi-delta up">↑ 34.7%</span>
+      </div>
+      <div class="kpi" style="--accent:#c86af5">
+        <div class="kpi-source">INSTAGRAM</div>
+        <div class="kpi-val" id="igreac">892K</div>
+        <div class="kpi-label">Reach (30d)</div>
+        <span class="kpi-delta up">↑ 28.9%</span>
+      </div>
+      <div class="kpi" style="--accent:#ff5e5e">
+        <div class="kpi-source">TIKTOK</div>
+        <div class="kpi-val" id="ttvid">5.2M</div>
+        <div class="kpi-label">Video Views</div>
+        <span class="kpi-delta up">↑ 61.2%</span>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Revenue Trend · Channel Performance</div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Revenue Over Time</div>
+            <div class="chart-subtitle">Shopify daily revenue · last 30 days</div>
+          </div>
+          <div class="chart-tag">SHOPIFY</div>
+        </div>
+        <div class="legend-row">
+          <div class="legend-item"><div class="legend-dot" style="background:#c8f565"></div>Revenue</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#4a7cff"></div>Email Attr.</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff6b9d"></div>SMS Attr.</div>
+        </div>
+        <div class="chart-wrap" style="height:220px">
+          <canvas id="revenueChart" role="img" aria-label="Line chart showing daily revenue, email-attributed, and SMS-attributed sales over 30 days">Revenue trending upward over the period.</canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Email Metrics</div>
+            <div class="chart-subtitle">Klaviyo · open & click rates</div>
+          </div>
+          <div class="chart-tag">KLAVIYO</div>
+        </div>
+        <div class="legend-row">
+          <div class="legend-item"><div class="legend-dot" style="background:#4a7cff"></div>Open Rate</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#c8f565"></div>Click Rate</div>
+        </div>
+        <div class="chart-wrap" style="height:220px">
+          <canvas id="emailChart" role="img" aria-label="Line chart of email open rate and click rate over 30 days">Open rate averaging 41%, click rate around 5%.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Social Engagement</div>
+            <div class="chart-subtitle">Instagram + TikTok</div>
+          </div>
+        </div>
+        <div class="legend-row">
+          <div class="legend-item"><div class="legend-dot" style="background:#c86af5"></div>Instagram</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff5e5e"></div>TikTok</div>
+        </div>
+        <div class="chart-wrap" style="height:170px">
+          <canvas id="socialChart" role="img" aria-label="Line chart comparing Instagram and TikTok weekly engagement over 8 weeks">Both channels trending upward with TikTok surging recently.</canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">SMS Performance</div>
+            <div class="chart-subtitle">Attentive · CTR & Revenue</div>
+          </div>
+          <div class="chart-tag">ATTENTIVE</div>
+        </div>
+        <div class="legend-row">
+          <div class="legend-item"><div class="legend-dot" style="background:#ff6b9d"></div>CTR %</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#c8f565"></div>Revenue ($K)</div>
+        </div>
+        <div class="chart-wrap" style="height:170px">
+          <canvas id="smsChart" role="img" aria-label="Bar and line chart of SMS click-through rate and revenue by campaign">CTR around 12-18%, revenue growing per send.</canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Top Products</div>
+            <div class="chart-subtitle">Shopify · by units sold</div>
+          </div>
+          <div class="chart-tag">SHOPIFY</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>PRODUCT</th>
+                <th>UNITS</th>
+                <th>SHARE</th>
+                <th>vs LM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PB Crunch Protein+</td>
+                <td>1,240</td>
+                <td><div style="width:100%;background:#1a1b1c;border-radius:2px;"><div class="bar-mini" style="width:84%"></div></div></td>
+                <td><span class="pill pill-green">+24%</span></td>
+              </tr>
+              <tr>
+                <td>Bestseller Sampler</td>
+                <td>987</td>
+                <td><div style="width:100%;background:#1a1b1c;border-radius:2px;"><div class="bar-mini" style="width:67%"></div></div></td>
+                <td><span class="pill pill-green">+18%</span></td>
+              </tr>
+              <tr>
+                <td>High Protein Sampler</td>
+                <td>854</td>
+                <td><div style="width:100%;background:#1a1b1c;border-radius:2px;"><div class="bar-mini" style="width:58%"></div></div></td>
+                <td><span class="pill pill-green">+11%</span></td>
+              </tr>
+              <tr>
+                <td>Superfood Chocolate</td>
+                <td>723</td>
+                <td><div style="width:100%;background:#1a1b1c;border-radius:2px;"><div class="bar-mini" style="width:49%"></div></div></td>
+                <td><span class="pill pill-red">-3%</span></td>
+              </tr>
+              <tr>
+                <td>Build Your Own Box</td>
+                <td>612</td>
+                <td><div style="width:100%;background:#1a1b1c;border-radius:2px;"><div class="bar-mini" style="width:41%"></div></div></td>
+                <td><span class="pill pill-green">+7%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Funnel · Subscriber Growth</div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Subscriber Growth</div>
+            <div class="chart-subtitle">Email + SMS list size over time</div>
+          </div>
+        </div>
+        <div class="legend-row">
+          <div class="legend-item"><div class="legend-dot" style="background:#4a7cff"></div>Email (Klaviyo)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff6b9d"></div>SMS (Attentive)</div>
+        </div>
+        <div class="chart-wrap" style="height:190px">
+          <canvas id="subsChart" role="img" aria-label="Area line chart showing email and SMS subscriber list growth over 12 months">Email list at 218K, SMS at 87K, both growing month over month.</canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Traffic → Revenue Funnel</div>
+            <div class="chart-subtitle">Shopify attribution this period</div>
+          </div>
+          <div class="chart-tag">SHOPIFY</div>
+        </div>
+        <div style="padding-top: 8px;">
+          <div class="chan-row">
+            <div>
+              <div class="chan-name">Organic Search</div>
+              <div style="width:100%;background:#1a1b1c;border-radius:2px;margin-top:5px;"><div style="height:4px;border-radius:2px;background:#c8f565;width:72%"></div></div>
+            </div>
+            <div class="chan-val">$83K</div>
+          </div>
+          <div class="chan-row">
+            <div>
+              <div class="chan-name">Email (Klaviyo)</div>
+              <div style="width:100%;background:#1a1b1c;border-radius:2px;margin-top:5px;"><div style="height:4px;border-radius:2px;background:#4a7cff;width:55%"></div></div>
+            </div>
+            <div class="chan-val">$64K</div>
+          </div>
+          <div class="chan-row">
+            <div>
+              <div class="chan-name">Paid Social</div>
+              <div style="width:100%;background:#1a1b1c;border-radius:2px;margin-top:5px;"><div style="height:4px;border-radius:2px;background:#c86af5;width:42%"></div></div>
+            </div>
+            <div class="chan-val">$49K</div>
+          </div>
+          <div class="chan-row">
+            <div>
+              <div class="chan-name">SMS (Attentive)</div>
+              <div style="width:100%;background:#1a1b1c;border-radius:2px;margin-top:5px;"><div style="height:4px;border-radius:2px;background:#ff6b9d;width:27%"></div></div>
+            </div>
+            <div class="chan-val">$31K</div>
+          </div>
+          <div class="chan-row">
+            <div>
+              <div class="chan-name">Direct / Other</div>
+              <div style="width:100%;background:#1a1b1c;border-radius:2px;margin-top:5px;"><div style="height:4px;border-radius:2px;background:#555;width:18%"></div></div>
+            </div>
+            <div class="chan-val">$21K</div>
+          </div>
+          <div class="chan-row">
+            <div>
+              <div class="chan-name">TikTok</div>
+              <div style="width:100%;background:#1a1b1c;border-radius:2px;margin-top:5px;"><div style="height:4px;border-radius:2px;background:#ff5e5e;width:14%"></div></div>
+            </div>
+            <div class="chan-val">$17K</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+Chart.defaults.color = '#666';
+Chart.defaults.borderColor = '#1e1f20';
+Chart.defaults.font.family = 'DM Sans, sans-serif';
+
+const labels30 = Array.from({length:30},(_,i)=>{
+  const d=new Date(); d.setDate(d.getDate()-29+i);
+  return (d.getMonth()+1)+'/'+(d.getDate());
+});
+
+const seed = (i,base,amp,freq=1)=>Math.round(base+amp*Math.sin(i*freq*0.6+1)+amp*0.4*Math.sin(i*freq*0.2));
+const revData = labels30.map((_,i)=>seed(i,9200,2400,1.1));
+const emailAttr = labels30.map((_,i)=>seed(i,2100,500,0.9));
+const smsAttr = labels30.map((_,i)=>seed(i,1050,280,1.3));
+
+new Chart(document.getElementById('revenueChart'),{
+  type:'line',
+  data:{
+    labels:labels30,
+    datasets:[
+      {label:'Revenue',data:revData,borderColor:'#c8f565',backgroundColor:'rgba(200,245,101,0.08)',fill:true,tension:0.4,pointRadius:0,borderWidth:2,pointHoverRadius:4},
+      {label:'Email Attr.',data:emailAttr,borderColor:'#4a7cff',backgroundColor:'rgba(74,124,255,0.06)',fill:true,tension:0.4,pointRadius:0,borderWidth:1.5,borderDash:[0,0]},
+      {label:'SMS Attr.',data:smsAttr,borderColor:'#ff6b9d',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:0,borderWidth:1.5,borderDash:[4,3]}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1b1c',borderColor:'#2a2b2c',borderWidth:1,padding:10,callbacks:{label:(c)=>`${c.dataset.label}: $${c.parsed.y.toLocaleString()}`}}},
+    scales:{
+      x:{grid:{color:'#181919'},ticks:{maxTicksLimit:8,font:{size:10}}},
+      y:{grid:{color:'#181919'},ticks:{callback:v=>'$'+(v>=1000?(v/1000).toFixed(0)+'K':v),font:{size:10}}}
+    }
+  }
+});
+
+const emailLabels = labels30.filter((_,i)=>i%3===0);
+const openRates = emailLabels.map((_,i)=>+(38+5*Math.sin(i*0.7)+Math.random()*2).toFixed(1));
+const clickRates = emailLabels.map((_,i)=>+(4.8+1.2*Math.sin(i*0.5)+Math.random()*0.5).toFixed(1));
+
+new Chart(document.getElementById('emailChart'),{
+  type:'line',
+  data:{
+    labels:emailLabels,
+    datasets:[
+      {label:'Open Rate',data:openRates,borderColor:'#4a7cff',backgroundColor:'rgba(74,124,255,0.08)',fill:true,tension:0.4,pointRadius:2,borderWidth:2,pointBackgroundColor:'#4a7cff'},
+      {label:'Click Rate',data:clickRates,borderColor:'#c8f565',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:2,borderWidth:2,pointBackgroundColor:'#c8f565'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1b1c',borderColor:'#2a2b2c',borderWidth:1,padding:10,callbacks:{label:(c)=>`${c.dataset.label}: ${c.parsed.y.toFixed(1)}%`}}},
+    scales:{
+      x:{grid:{color:'#181919'},ticks:{maxTicksLimit:6,font:{size:10}}},
+      y:{grid:{color:'#181919'},ticks:{callback:v=>v+'%',font:{size:10}},min:30,max:55}
+    }
+  }
+});
+
+const wkLabels=['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8'];
+const igData=[28400,31200,29800,34100,38600,41200,37900,45300];
+const ttData=[41000,55000,48000,72000,89000,103000,128000,157000];
+
+new Chart(document.getElementById('socialChart'),{
+  type:'line',
+  data:{
+    labels:wkLabels,
+    datasets:[
+      {label:'Instagram',data:igData,borderColor:'#c86af5',backgroundColor:'rgba(200,106,245,0.08)',fill:true,tension:0.3,pointRadius:3,borderWidth:2,pointBackgroundColor:'#c86af5'},
+      {label:'TikTok',data:ttData,borderColor:'#ff5e5e',backgroundColor:'rgba(255,94,94,0.06)',fill:true,tension:0.3,pointRadius:3,borderWidth:2,pointBackgroundColor:'#ff5e5e',borderDash:[4,3]}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1b1c',borderColor:'#2a2b2c',borderWidth:1,padding:10,callbacks:{label:(c)=>`${c.dataset.label}: ${(c.parsed.y/1000).toFixed(0)}K`}}},
+    scales:{
+      x:{grid:{color:'#181919'},ticks:{font:{size:10}}},
+      y:{grid:{color:'#181919'},ticks:{callback:v=>(v/1000).toFixed(0)+'K',font:{size:10}}}
+    }
+  }
+});
+
+const smsLabels=['Flash Sale','Win-back','Abandon','New Drop','VIP','Bundle','Restock','Holiday'];
+const smsCtr=[14.2,11.8,18.6,15.9,21.3,13.4,16.7,19.8];
+const smsRevK=[3.8,2.9,4.2,3.5,5.1,3.1,4.6,5.8];
+
+new Chart(document.getElementById('smsChart'),{
+  type:'bar',
+  data:{
+    labels:smsLabels,
+    datasets:[
+      {label:'CTR %',data:smsCtr,backgroundColor:'rgba(255,107,157,0.3)',borderColor:'#ff6b9d',borderWidth:1.5,borderRadius:3,yAxisID:'y'},
+      {label:'Revenue $K',data:smsRevK,type:'line',borderColor:'#c8f565',pointRadius:3,pointBackgroundColor:'#c8f565',tension:0.3,borderWidth:2,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1b1c',borderColor:'#2a2b2c',borderWidth:1,padding:8}},
+    scales:{
+      x:{grid:{display:false},ticks:{font:{size:9},maxRotation:35}},
+      y:{grid:{color:'#181919'},ticks:{callback:v=>v+'%',font:{size:9}},position:'left'},
+      y2:{grid:{display:false},ticks:{callback:v=>'$'+v+'K',font:{size:9}},position:'right'}
+    }
+  }
+});
+
+const months=['May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
+const emailSubs=months.map((_,i)=>Math.round(155000+5800*i+2000*Math.sin(i*0.8)));
+const smsSubs=months.map((_,i)=>Math.round(54000+2900*i+1500*Math.sin(i*0.6)));
+
+new Chart(document.getElementById('subsChart'),{
+  type:'line',
+  data:{
+    labels:months,
+    datasets:[
+      {label:'Email',data:emailSubs,borderColor:'#4a7cff',backgroundColor:'rgba(74,124,255,0.08)',fill:true,tension:0.3,pointRadius:3,borderWidth:2,pointBackgroundColor:'#4a7cff'},
+      {label:'SMS',data:smsSubs,borderColor:'#ff6b9d',backgroundColor:'rgba(255,107,157,0.06)',fill:true,tension:0.3,pointRadius:3,borderWidth:2,pointBackgroundColor:'#ff6b9d',borderDash:[4,3]}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1b1c',borderColor:'#2a2b2c',borderWidth:1,padding:10,callbacks:{label:(c)=>`${c.dataset.label}: ${c.parsed.y.toLocaleString()}`}}},
+    scales:{
+      x:{grid:{color:'#181919'},ticks:{font:{size:10}}},
+      y:{grid:{color:'#181919'},ticks:{callback:v=>(v/1000).toFixed(0)+'K',font:{size:10}}}
+    }
+  }
+});
+
+function setRange(btn, range) {
+  document.querySelectorAll('.dr-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const mults = {'7d':{rev:'$67K',revD:'↑ 9.2%',orders:'1,120',ordersD:'↑ 6.4%',aov:'$60',aovD:'↑ 4.1%',cvr:'3.9%',cvrD:'↑ 0.6pp',roas:'4.5x',roasD:'↑ 0.1x',korev:'$15K',kor:'42.8%',smsrev:'$7.4K',igreac:'214K',ttvid:'1.3M'},'30d':{rev:'$284K',revD:'↑ 18.4%',orders:'4,812',ordersD:'↑ 12.1%',aov:'$59',aovD:'↑ 5.6%',cvr:'3.8%',cvrD:'↑ 0.4pp',roas:'4.2x',roasD:'↓ 0.3x',korev:'$64K',kor:'41.2%',smsrev:'$31K',igreac:'892K',ttvid:'5.2M'},'90d':{rev:'$841K',revD:'↑ 31.7%',orders:'14,238',ordersD:'↑ 21.4%',aov:'$59',aovD:'↑ 6.2%',cvr:'3.6%',cvrD:'↑ 0.2pp',roas:'3.9x',roasD:'↓ 0.6x',korev:'$189K',kor:'39.4%',smsrev:'$94K',igreac:'2.7M',ttvid:'18.4M'}};
+  const m = mults[range];
+  document.getElementById('rev').textContent=m.rev;
+  document.getElementById('revD').textContent=m.revD;
+  document.getElementById('orders').textContent=m.orders;
+  document.getElementById('ordersD').textContent=m.ordersD;
+  document.getElementById('aov').textContent=m.aov;
+  document.getElementById('aovD').textContent=m.aovD;
+  document.getElementById('cvr').textContent=m.cvr;
+  document.getElementById('cvrD').textContent=m.cvrD;
+  document.getElementById('roas').textContent=m.roas;
+  document.getElementById('roasD').textContent=m.roasD;
+  document.getElementById('korev').textContent=m.korev;
+  document.getElementById('kor').textContent=m.kor;
+  document.getElementById('smsrev').textContent=m.smsrev;
+  document.getElementById('igreac').textContent=m.igreac;
+  document.getElementById('ttvid').textContent=m.ttvid;
+}
+</script>
